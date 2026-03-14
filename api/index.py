@@ -14,3 +14,4 @@ for path in (PROJECT_ROOT, REPO_ROOT):
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bookmyseat.settings')
 
 from vercel_django import handler
+app = handler  # explicit export for Vercel runtime

@@ -11,11 +11,13 @@ import os
 import sys
 from pathlib import Path
 
-# Ensure the Django project package (the inner bookmyseat folder) is importable.
-# Vercel executes from the repository root, so we need the *parent* directory
-# that contains the package (outer bookmyseat) on sys.path.
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+# Make sure both the project root (<repo>/bookmyseat) and the repo root are on sys.path.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent  # outer bookmyseat folder
+REPO_ROOT = PROJECT_ROOT.parent                        # repo root
+for path in (PROJECT_ROOT, REPO_ROOT):
+    path_str = str(path)
+    if path_str not in sys.path:
+        sys.path.insert(0, path_str)
 
 from django.core.wsgi import get_wsgi_application
 

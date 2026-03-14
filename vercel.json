@@ -1,14 +1,19 @@
 {
+  "buildCommand": "python bookmyseat/manage.py collectstatic --noinput",
   "builds": [
     {
-      "src": "bookmyseat/bookmyseat/wsgi.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "bookmyseat/bookmyseat/wsgi.py"
+      "dest": "api/index.py"
     }
   ]
 }

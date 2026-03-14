@@ -8,7 +8,7 @@ from movies.models import Movie, Theater, Seat, Booking
 
 def home(request):
     movies = Movie.objects.all()
-    return render(request, 'users/home.html', {'movies': movies})
+    return render(request, 'home.html', {'movies': movies})
 
 def register(request):
     if request.method == 'POST':
@@ -41,7 +41,7 @@ def login_view(request):
 
 @login_required
 def profile(request):
-    booking = Booking.objects.filter(user=request.user)
+    bookings = Booking.objects.filter(user=request.user)
     if request.user.is_authenticated:
         if request.method == 'POST':
             u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -50,7 +50,7 @@ def profile(request):
                 return redirect('profile')
         else:
             u_form = UserUpdateForm(instance=request.user)
-        return render(request, 'users/profile.html', {'u_form': u_form, 'preview_mode': False, 'booking': booking})
+        return render(request, 'users/profile.html', {'u_form': u_form, 'preview_mode': False, 'booking': bookings})
 
     # Temporary preview for anonymous users.
     u_form = UserUpdateForm()

@@ -1,4 +1,4 @@
-{% extends "users/basic.html" %} {% block content %}
+﻿{% extends "base.html" %} {% load static %} {% block content %}
 <!-- Font Awesome CDN -->
 <link
   rel="stylesheet"
@@ -24,7 +24,7 @@
               <i class="fas fa-envelope me-2"></i>Message
             </a>
             <a
-              href="{% url 'password_reset' %}"
+              href="{% url 'reset-password' %}"
               class="btn btn-outline-secondary"
             >
               <i class="fas fa-key me-2"></i>Reset Password

@@ -1,15 +1,150 @@
-{%  extends "users/basic.html" %}
-
+{% extends "users/basic.html" %}
 {% block content %}
-    <div class="container mt-4">
-        <h2>Register</h2>
-        <form method="post">
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white text-center">
+          <h5 class="modal-title mb-0">
+            <i class="fas fa-user-plus me-2"></i> Register
+          </h5>
+        </div>
+        <div class="card-body">
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">
+            {{ form.non_field_errors }}
+          </div>
+          {% endif %}
+
+          <form method="POST" action="{% url 'register' %}">
             {% csrf_token %}
-            {{form.as_p}}
-            <div>   
-                <button  class="btn btn-primary mt-2" type="submit"> Register</button>
+
+            <!-- Username -->
+            <div class="mb-3">
+              <label for="{{ form.username.id_for_label }}" class="form-label"
+                >Username <span class="text-danger">*</span></label
+              >
+              <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="fas fa-user text-muted"></i>
+                </span>
+                {{ form.username }}
+              </div>
+              {% if form.username.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.username.errors|striptags }}
+              </div>
+              {% else %}
+              <div class="form-text">
+                {{ form.username.help_text|safe }}
+              </div>
+              {% endif %}
             </div>
-        </form>
-        <p>Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="{{ form.email.id_for_label }}" class="form-label"
+                >Email <span class="text-danger">*</span></label
+              >
+              <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="fas fa-envelope text-muted"></i>
+                </span>
+                {{ form.email }}
+              </div>
+              {% if form.email.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.email.errors|striptags }}
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="{{ form.password1.id_for_label }}" class="form-label"
+                >Password</label
+              >
+              <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="fas fa-lock text-muted"></i>
+                </span>
+                {{ form.password1 }}
+              </div>
+              {% if form.password1.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.password1.errors|striptags }}
+              </div>
+              {% else %}
+              <div class="form-text">
+                {{ form.password1.help_text|safe }}
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-4">
+              <label for="{{ form.password2.id_for_label }}" class="form-label"
+                >Password confirmation</label
+              >
+              <div class="input-group">
+                <span class="input-group-text bg-light">
+                  <i class="fas fa-lock text-muted"></i>
+                </span>
+                {{ form.password2 }}
+              </div>
+              {% if form.password2.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.password2.errors|striptags }}
+              </div>
+              {% else %}
+              <div class="form-text">
+                {{ form.password2.help_text|safe }}
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="d-grid mb-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i> Register
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-center bg-light">
+          <small>
+            Already have an account?
+            <a href="{% url 'login' %}" class="fw-semibold">Log In</a>
+          </small>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+/>
+
+<style>
+  .card {
+    border-radius: 10px;
+  }
+  .card-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  .card-footer {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .input-group-text {
+    width: 44px;
+    justify-content: center;
+  }
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+  }
+</style>
 {% endblock %}

@@ -13,5 +13,7 @@ for path in (PROJECT_ROOT, REPO_ROOT):
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bookmyseat.settings')
 
-from vercel_django import handler
-app = handler  # explicit export for Vercel runtime
+from django.core.wsgi import get_wsgi_application
+
+# Vercel expects `app` as the entrypoint for Python functions
+app = get_wsgi_application()

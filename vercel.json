@@ -3,8 +3,8 @@
   "version": 2,
   "buildCommand": "python bookmyseat/manage.py collectstatic --noinput",
   "functions": {
-    "runtime": "python3.12",
     "bookmyseat/api/index.py": {
+      "runtime": "python3.12",
       "includeFiles": "bookmyseat/**"
     }
   },

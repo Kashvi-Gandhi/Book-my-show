@@ -4,7 +4,6 @@
   "buildCommand": "python bookmyseat/manage.py collectstatic --noinput",
   "functions": {
     "api/**/*.py": {
-      "runtime": "python@3.12", 
       "includeFiles": "bookmyseat/**"
     }
   },

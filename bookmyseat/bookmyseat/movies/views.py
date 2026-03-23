@@ -32,6 +32,7 @@ def movie_list(request):
     }
     ordering = order_map.get(sort, ("-rating", "-id"))
 
+    # Prefetch genres to avoid N+1 on result cards; keeps facet queries separate.
     base_qs = Movie.objects.prefetch_related("genres").all()
 
     if search_query:

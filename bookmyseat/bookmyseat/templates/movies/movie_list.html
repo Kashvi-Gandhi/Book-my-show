@@ -7,38 +7,46 @@
   <form id="filterForm" method="get" action="{% url 'movie_list' %}">
     <div class="row">
       <!-- Filters -->
-      <div class="col-lg-3 mb-4">
+      <div class="col-lg-4 mb-4">
         <div class="card shadow-sm">
           <div class="card-body">
             <div class="mb-3">
               <label class="form-label fw-semibold">Search</label>
-              <input class="form-control" name="search" value="{{ search_query }}" placeholder="Search movies">
+              <input class="form-control" style="width: 100%;" name="search" value="{{ search_query }}" placeholder="Search movies, cast, etc.">
             </div>
 
             <div class="mb-4">
-              <label class="form-label fw-semibold">Genres</label>
-              <select class="form-select" name="genres">
-                <option value="">All genres</option>
+              <div class="d-flex align-items-center justify-content-between">
+                <label class="form-label fw-semibold mb-0">Genres</label>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleFilter('genre-filter')">▼</button>
+              </div>
+              <div id="genre-filter" class="pill-wrap mt-2 {% if selected_genres %}{% else %}d-none{% endif %}">
                 {% for genre, gcount in genres %}
-                  <option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>
-                    {{ genre.name }} ({{ gcount }})
-                  </option>
+                  <label class="pill-check">
+                    <input type="checkbox" name="genres" value="{{ genre.id }}" {% if genre.id in selected_genres %}checked{% endif %}>
+                    <span>{{ genre.name }}</span>
+                    <small>{{ gcount }}</small>
+                  </label>
                 {% empty %}
-                  <option disabled>No genres yet</option>
+                  <span class="text-muted small">No genres yet.</span>
                 {% endfor %}
-              </select>
+              </div>
             </div>
 
             <div class="mb-4">
-              <label class="form-label fw-semibold">Languages</label>
-              <select class="form-select" name="languages">
-                <option value="">All languages</option>
+              <div class="d-flex align-items-center justify-content-between">
+                <label class="form-label fw-semibold mb-0">Languages</label>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleFilter('language-filter')">▼</button>
+              </div>
+              <div id="language-filter" class="pill-wrap mt-2 {% if selected_languages %}{% else %}d-none{% endif %}">
                 {% for lang, count in language_options %}
-                  <option value="{{ lang }}" {% if lang in selected_languages %}selected{% endif %}>
-                    {{ lang }} ({{ count|default:"0" }})
-                  </option>
+                  <label class="pill-check">
+                    <input type="checkbox" name="languages" value="{{ lang }}" {% if lang in selected_languages %}checked{% endif %}>
+                    <span>{{ lang }}</span>
+                    <small>{{ count|default:"0" }}</small>
+                  </label>
                 {% endfor %}
-              </select>
+              </div>
             </div>
 
             <div class="d-grid">
@@ -50,7 +58,7 @@
       </div>
 
       <!-- Results -->
-      <div class="col-lg-9">
+      <div class="col-lg-8">
         <div class="toolbar bg-white border rounded-3 p-3 mb-4">
           <div class="row g-3 align-items-center">
             <div class="col-md-4">
@@ -80,7 +88,13 @@
           {% for movie in movies %}
           <div class="col-md-4 mb-4">
             <div class="card h-100 movie-card shadow-sm">
+              {% if movie.image %}
               <img src="{{ movie.image.url }}" class="card-img-top" alt="{{ movie.name }}" style="height: 250px; object-fit: cover;">
+              {% else %}
+              <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                <span class="text-muted">No image</span>
+              </div>
+              {% endif %}
               <div class="card-body">
                 <h5 class="card-title">{{ movie.name }}</h5>
                 <p class="card-text mb-1">
@@ -162,5 +176,49 @@
   .toolbar .form-select {
     min-width: 180px;
   }
+  .pill-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pill-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 0.9rem;
+  }
+  .pill-check input {
+    accent-color: #0d6efd;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+  }
+  .pill-check small {
+    color: #6b7280;
+    font-weight: 600;
+  }
+  .pill-check:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .btn-outline-secondary {
+    padding: 2px 8px;
+    line-height: 1.1;
+  }
 </style>
+
+<script>
+  function toggleFilter(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.toggle('d-none');
+    }
+  }
+</script>
 {% endblock %}

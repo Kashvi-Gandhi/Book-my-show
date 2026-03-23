@@ -7,7 +7,8 @@ from django.contrib import messages
 from movies.models import Movie, Theater, Seat, Booking
 
 def home(request):
-    movies = Movie.objects.all()
+    # Show a small, optimized selection on home with prefetched genres
+    movies = Movie.objects.prefetch_related("genres").order_by("-rating", "-id")[:12]
     return render(request, 'home.html', {'movies': movies})
 
 def register(request):

@@ -13,10 +13,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from dotenv import load_dotenv, find_dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(find_dotenv())
 
 
 # Quick-start development settings - unsuitable for production
@@ -92,8 +94,24 @@ DATABASES = {
     }
 }
 
-if 'DATABASE_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.parse(os.environ['DATABASE_URL'])
+# Only switch to DATABASE_URL when explicitly requested (to avoid accidental
+# remote connections during local dev).
+USE_DATABASE_URL = os.environ.get('USE_DATABASE_URL', '').lower() == 'true'
+
+if USE_DATABASE_URL and 'DATABASE_URL' in os.environ:
+    driver_available = False
+    try:
+        import psycopg  # type: ignore  # noqa: F401
+        driver_available = True
+    except ImportError:
+        try:
+            import psycopg2  # type: ignore  # noqa: F401
+            driver_available = True
+        except ImportError:
+            driver_available = False
+
+    if driver_available:
+        DATABASES['default'] = dj_database_url.parse(os.environ['DATABASE_URL'])
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
